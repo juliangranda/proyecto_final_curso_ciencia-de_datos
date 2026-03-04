@@ -1,0 +1,6 @@
+Instalación de lo necesario para la ejecución de la aplicación
+
+.\.venv\Scripts\activate 
+pip install -r requirements.txt
+streamlit run index.py (Enter sin correo)
+para salir ( Control + ENTER)
