@@ -22,3 +22,18 @@ def cargar_datos():
 df = cargar_datos()
 
 ##---------------------------Cuerpo del Proyecto--------------------
+
+
+##---------------------------Navegación entre páginas--------------------
+
+
+pg = st.navigation([
+    st.Page("pages/home.py", title="Home", icon=":material/home:"),
+    st.Page("pages/filtros.py", title="Filtros", icon=":material/filter_list:"),
+    st.Page("pages/kpis.py", title="KPIs", icon=":material/insights:"),
+    st.Page("pages/tablas.py", title="Tablas", icon=":material/table_chart:"),
+    st.Page("pages/graficos.py", title="Gráficos", icon=":material/insert_chart:"),
+])
+
+pg.run()
+

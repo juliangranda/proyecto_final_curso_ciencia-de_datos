@@ -3,7 +3,9 @@ Portada
 --Título del proyecto.
 --Descripción breve del dataset.
 
-Objetivos del dashboard.Encontrar las relaciones entre Ocupacion, Edad y Genero  con Sleep Duration	Quality of SleepPhysical Activity Level	Stress Level*
+Objetivos del dashboard.
+
+Encontrar las relaciones entre Ocupacion, Edad y Genero  con Sleep Duration	Quality of SleepPhysical Activity Level	Stress Level*
 --Filtros globales (Ocupacion, Edad y Por genero)
 ./--Filtro de Edad * Sleep Duration	Quality of Sleep	Physical Activity Level	Stress Level. 
 ./--Filtro de Ocupacion * Sleep Duration	Quality of Sleep	Physical Activity Level	Stress Level.
