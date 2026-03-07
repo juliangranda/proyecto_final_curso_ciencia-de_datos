@@ -5,6 +5,9 @@ Portada
 
 Objetivos del dashboard.
 
+#los filtros son la parte de navegacion entre paginas la cuya esta hecha
+
+#los filtros vendrian a ser mas graficas
 Encontrar las relaciones entre Ocupacion, Edad y Genero  con Sleep Duration	Quality of SleepPhysical Activity Level	Stress Level*
 --Filtros globales (Ocupacion, Edad y Por genero)
 ./--Filtro de Edad * Sleep Duration	Quality of Sleep	Physical Activity Level	Stress Level. 

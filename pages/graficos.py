@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 
-st.title("Gráficos")
+st.title("Gráficos", text_alignment= "center")
 
 def cargar_datos():
     url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
@@ -14,13 +15,10 @@ def cargar_datos():
     df.fillna({"sleep disorder":"unknown"}, inplace=True)
     return df
 
-source = cargar_datos()
+df = cargar_datos()
 
-#revisar por que esta raro
-st.bar_chart(source, x="occupation", y="stress level", color= "blue", stack=False)
-
-
-source = source[["occupation", "stress level"]].groupby("occupation").mean().reset_index()
-st.bar_chart(source, x="occupation", y="stress level", color= "blue", stack=False)
-
+#----------------------------Gráfico de barras: Nivel de estrés promedio por ocupación--------------------
+st.subheader("Nivel de estrés promedio por ocupación", text_alignment= "center")
+df = df[["occupation", "stress level"]].groupby("occupation").mean().reset_index()
+st.bar_chart(df, x="occupation", y="stress level", color= "blue", stack=False)
 
