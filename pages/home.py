@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 st.title("Análisis del Sueño")
-st.write("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
+st.subheader("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
 
 
 def cargar_datos():
@@ -16,6 +16,7 @@ def cargar_datos():
 
 df = cargar_datos()
 
+st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
 #374 filas tiene el data set y 13 columnas
 st.write("El dataset contiene {} filas y {} columnas.".format(df.shape[0], df.shape[1]))
 filas = st.slider("Selecciona el número de filas a mostrar:", 0, 374, 187)

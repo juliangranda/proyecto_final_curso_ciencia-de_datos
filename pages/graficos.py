@@ -16,10 +16,8 @@ def cargar_datos():
 
 df = cargar_datos()
 
-#revisar por que esta raro
-st.bar_chart(df, x="occupation", y="stress level", color= "blue", stack=False)
-
-
+#----------------------------Gráfico de barras: Nivel de estrés promedio por ocupación--------------------
+st.subheader("Nivel de estrés promedio por ocupación", text_alignment= "center")
 df = df[["occupation", "stress level"]].groupby("occupation").mean().reset_index()
 st.bar_chart(df, x="occupation", y="stress level", color= "blue", stack=False)
 
