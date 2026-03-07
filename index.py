@@ -26,7 +26,6 @@ df = cargar_datos()
 
 ##---------------------------Navegación entre páginas--------------------
 
-
 pg = st.navigation([
     st.Page("pages/home.py", title="Home", icon=":material/home:"),
     st.Page("pages/filtros.py", title="Filtros", icon=":material/filter_list:"),
