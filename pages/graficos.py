@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 st.title("Gráficos", text_alignment= "center")
 
@@ -20,5 +21,4 @@ df = cargar_datos()
 st.subheader("Nivel de estrés promedio por ocupación", text_alignment= "center")
 df = df[["occupation", "stress level"]].groupby("occupation").mean().reset_index()
 st.bar_chart(df, x="occupation", y="stress level", color= "blue", stack=False)
-
 

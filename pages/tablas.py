@@ -40,3 +40,4 @@ st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
 st.subheader("Nivel de actividad física promedio por ocupación", text_alignment= "center")
 df_exercise = df.groupby('occupation')['physical activity level'].agg(["min", "max", "mean"]).round(2).reset_index()
 st.dataframe(df_exercise)
+
