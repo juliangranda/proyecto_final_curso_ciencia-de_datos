@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
 st.title("Análisis del Sueño")
-st.subheader("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
+st.header("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
 
-
+def espacio():
+    st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
 def cargar_datos():
     url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
     df = pd.read_csv(url)
@@ -15,9 +16,48 @@ def cargar_datos():
     return df
 
 df = cargar_datos()
+with st.expander("Exploración Inicial del DataSet", expanded=True):
+    st.header("🔍 Exploración Inicial del DataSet")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total de Filas", df.shape[0], help="Número total de registros")
+    with col2:
+        st.metric("Características", df.shape[1], help="Número de variables analizadas")
+    with col3:
+        st.metric("Ocupaciones", len(df['occupation'].unique()), help="Diversidad de empleos")
 
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-#374 filas tiene el data set y 13 columnas
-st.write("El dataset contiene {} filas y {} columnas.".format(df.shape[0], df.shape[1]))
-filas = st.slider("Selecciona el número de filas a mostrar:", 0, 374, 187)
-st.write(df.head(filas))
+st.markdown("---")
+#----------------------------Descripción del DataSet--------------------
+with st.expander("Descripción del DataSet", expanded=True):
+    st.write("El DataSet analiza la calidad del sueño y el estilo de vida. Las variables incluidas son:")
+    st.info(f"**Columnas:** {', '.join(df.columns)}")
+
+st.markdown("---")
+# --- Visualización Dinámica del DataFrame ---
+with st.expander("Ver datos crudos del DataSet", expanded=True):
+    st.subheader("📋 Descripción de Variables")
+    st.write("El DataSet analiza la **calidad del sueño** y el **estilo de vida**. Las variables incluidas son:")
+    filas = st.slider("Ajusta cuántas filas quieres explorar:", 5, df.shape[0], 10)
+    st.write(f"Mostrando las primeras **{filas}** entradas:")
+    # st.dataframe es más interactivo que st.write
+    st.dataframe(df.head(filas), use_container_width=True)
+
+st.markdown("---")
+#----------------------------Ocupaciones Laborales--------------------
+with st.expander("Profesiones Representadas", expanded=True):
+    st.write("El DataSet incluye una variedad de profesiones, lo que permite analizar cómo el estrés y la calidad del sueño varían según el tipo de trabajo.")
+    st.success(f"**Ocupaciones únicas encontradas:** \n\n {', '.join(df['occupation'].unique())}")
+
+st.markdown("---")
+#----------------------------Objetivos--------------------
+with st.expander("Objetivos del Análisis", expanded=True):
+    st.markdown("""
+    **Objetivo General:** Analizar la relación multidimensional entre hábitos de vida (actividad física, ocupación, IMC) y la calidad del sueño.
+
+    * **Objetivo 1:** Identificar profesiones con niveles críticos de estrés y su impacto en el sueño.
+    * **Objetivo 2:** Validar si superar los 7,000 pasos diarios mejora el descanso subjetivo.
+    * **Objetivo 3:** Cruzar el IMC con la calidad de sueño para detectar perfiles de riesgo.
+    """)
+
+
+

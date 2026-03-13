@@ -20,52 +20,74 @@ def cargar_datos():
 
 df = cargar_datos()
 
-# Espaciado
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
+# --- Encabezado Principal ---
+st.title("🎯 KPIs")
+st.markdown("Pie y HeatMap")
 
-#----------------------------pie de roles ocupacionales--------------------
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-st.subheader("Distribución de roles ocupacionales", text_alignment= "center")
-fig = px.pie(df, names="occupation")
-st.plotly_chart(fig)
+if "df_filtrado" in st.session_state:
+    df = st.session_state["df_filtrado"]
+    # --- Sección 1: Distribuciones Demográficas (En 3 Columnas) ---
+    st.subheader("📊 Perfil de la Muestra")
+    col1, col2, col3 = st.columns(3)
 
-#----------------------------pie de edad-------------------
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-st.subheader("Distribución de edades", text_alignment= "center")
-fig = px.pie(df, names="age")
-st.plotly_chart(fig)
+    with col1:
+        st.markdown("**Roles Ocupacionales**")
+        fig1 = px.pie(df, names="occupation", hole=0.4, color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig1.update_layout(showlegend=False, margin=dict(t=0, b=0, l=0, r=0))
+        st.plotly_chart(fig1, use_container_width=True)
 
-#----------------------------pie de Genero--------------------
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-st.subheader("Distribución de género", text_alignment= "center")
-fig = px.pie(df, names="gender")
-st.plotly_chart(fig)
+    with col2:
+        st.markdown("**Distribución por Edad**")
+        fig2 = px.pie(df, names="age", hole=0.4, color_discrete_sequence=px.colors.qualitative.Safe)
+        fig2.update_layout(showlegend=False, margin=dict(t=0, b=0, l=0, r=0))
+        st.plotly_chart(fig2, use_container_width=True)
+
+    with col3:
+        st.markdown("**Género**")
+        fig3 = px.pie(df, names="gender", hole=0.4, color_discrete_sequence=['#636EFA', '#EF553B'])
+        fig3.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+        st.plotly_chart(fig3, use_container_width=True)
+    st.divider()
+
+    st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
 
 
-#----------------------------Mapas de Calor--------------------
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-st.subheader("Mapa de Calor: Estrés vs Calidad de Sueño",text_alignment= "center")
-heatmap_data = pd.crosstab(df['occupation'], df['stress level'])
-fig_heat = px.imshow(heatmap_data, text_auto=True, color_continuous_scale='YlOrRd')
-st.plotly_chart(fig_heat, width="stretch")
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-
-#---------------------------------------------------------------
-st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-st.subheader("Mapa de calor: Correlación entre variables", text_alignment= "center")
-#Solo utilizamos las columnas numéricas para el análisis de correlación evitando generar errores con columnas tipo string.
-numeric_df = df.select_dtypes(include=["number"])
-if not numeric_df.empty:
-    corr = numeric_df.corr()
-    fig = px.imshow(
-        corr,
-        text_auto=True,
-        color_continuous_scale="YlGnBu",
-        labels={"x": "Variables", "y": "Variables", "color": "Correlación"},
-        zmin=-1,
-        zmax=1,
+    #----------------------------Mapas de Calor--------------------
+    # PROMEDIO de Estrés por Ocupación y Categoría de IMC
+    st.subheader("📊 Intensidad de Estrés por Profesión e IMC")
+    heatmap_avg = df.pivot_table(
+        index='occupation', 
+        columns='indice de masa corporal', 
+        values='stress level', 
+        aggfunc='mean'
     )
-    fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
-    st.plotly_chart(fig, width="stretch")
-else:
-    st.write("No hay columnas numéricas para mostrar el mapa de calor.")
+
+    fig_heat = px.imshow(
+        heatmap_avg,
+        text_auto=".1f", # Muestra el promedio con un decimal
+        color_continuous_scale='Viridis',
+        labels=dict(x="Categoría IMC", y="Ocupación", color="Estrés Promedio"),
+        
+    )
+    st.plotly_chart(fig_heat, use_container_width=True)
+    st.markdown("---")
+    #---------------------------------------------------------------
+    st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
+    st.subheader("📊 ¿Qué variables se relacionan entre sí?")
+
+    # 1. Seleccionar solo números (esto evita errores con texto)
+    df_numerico = df.select_dtypes(include=["number"])
+
+    # 2. Calcular la correlación (es una tablita de números entre -1 y 1)
+    matriz_correlacion = df_numerico.corr()
+
+    # 3. Crear el mapa de calor con Plotly Express
+    fig_corr = px.imshow(
+        matriz_correlacion,
+        text_auto=".2f", # Muestra solo 2 decimales
+        color_continuous_scale="RdBu_r", # Rojo (negativo), Azul (positivo)
+        zmin=-1, zmax=1 # Rango estándar de correlación
+    )
+
+    # 4. Mostrar en la pantalla
+    st.plotly_chart(fig_corr, use_container_width=True)
