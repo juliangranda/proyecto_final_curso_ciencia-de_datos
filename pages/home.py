@@ -1,21 +1,14 @@
 import streamlit as st
-import pandas as pd
+import pages.cargar_datos as datos
+
 st.title("🛌Análisis del Sueño", text_alignment= "center")
 st.header("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
 
 def espacio():
     st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
-def cargar_datos():
-    url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
-    df = pd.read_csv(url)
 
-    #Tratamiento de datos
-    df.columns = df.columns.str.lower()
-    df.rename(columns= {"bmi category":"indice de masa corporal"}, inplace=True)
-    df.fillna({"sleep disorder":"unknown"}, inplace=True)
-    return df
+df = datos.dataset()
 
-df = cargar_datos()
 with st.expander("Exploración Inicial del DataSet", expanded=True):
     col1, col2, col3 = st.columns(3)
     with col1:

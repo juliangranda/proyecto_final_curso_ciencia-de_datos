@@ -1,19 +1,10 @@
 import streamlit as st
 import pandas as pd
+import pages.cargar_datos as datos
+
 st.title(":material/table_chart: database", text_alignment= "center")
 
-#----------------------------Lectura del dataset--------------------
-def cargar_datos():
-    url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
-    df = pd.read_csv(url)
-
-    #Tratamiento de datos
-    df.columns = df.columns.str.lower()
-    df.rename(columns= {"bmi category":"indice de masa corporal"}, inplace=True)
-    df.fillna({"sleep disorder":"unknown"}, inplace=True)
-    return df
-
-df = cargar_datos()
+df = datos.dataset()
 
 # --- SECCIÓN 1: ESTRÉS VS SUEÑO (Comparativa) ---
 col1, col2 = st.columns(2)

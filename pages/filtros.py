@@ -1,19 +1,10 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
+import pages.cargar_datos as datos
 
-def cargar_datos():
-    url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
-    df = pd.read_csv(url)
+df_filtrado = datos.dataset()
 
-    #Tratamiento de datos
-    df.columns = df.columns.str.lower()
-    df.rename(columns= {"bmi category":"indice de masa corporal"}, inplace=True)
-    df.fillna({"sleep disorder":"unknown"}, inplace=True)
-    return df
-
-df_filtrado = cargar_datos()
 st.title("Filtros", text_alignment= "center")
 if "df_filtrado" in st.session_state:
     df_filtrado = st.session_state["df_filtrado"]
