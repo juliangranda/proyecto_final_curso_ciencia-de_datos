@@ -1,10 +1,12 @@
+from turtle import width
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 
 
-st.title("Gráficos", text_alignment= "center")
+st.title("📊 Análisis Gráficos", text_alignment= "center")
 
 def cargar_datos():
     url = "https://raw.githubusercontent.com/juliangranda/Prueba/refs/heads/main/dbs/Sleep_health_and_lifestyle_dataset.csv"
@@ -19,29 +21,37 @@ def cargar_datos():
 
 df = cargar_datos()
 
-st.title("📊 Análisis de Gráficos")
-st.write("Explora las relaciones entre el estilo de vida y la salud del sueño a través de datos.")
-
 if "df_filtrado" in st.session_state:
     df = st.session_state["df_filtrado"]
     # --- SECCIÓN 1: IMPACTO LABORAL ---
     with st.container():
-        st.header("🏢 Salud Laboral por Profesión")
+        st.header("🏢 Estres Laboral por Profesión")
         
-        # Agrupamos y sacamos el promedio
-        df_resumen = df.groupby('occupation')[['stress level', 'quality of sleep']].mean().reset_index()
+        tab1, tab2 = st.tabs(["Nivel de Estrés vs Occupacion","Calidad de Sueño vs Nivel de Estrés"])
         
-        fig_prof = px.bar(
-            df_resumen, 
-            x='occupation', 
-            y=['stress level', 'quality of sleep'],
-            barmode='group',
-            title="Estrés vs. Calidad de Sueño",
-            labels={'value': 'Puntaje', 'occupation': 'Profesión', 'variable': 'Indicador'},
-            color_discrete_map={'stress level': '#ef553b', 'quality of sleep': '#636efa'}
-        )
-        st.plotly_chart(fig_prof, use_container_width=True)
+        with tab1:
+            # Agrupamos y sacamos el promedio
+            df_resumen = df.groupby('occupation')[['stress level', 'quality of sleep']].mean().reset_index()
+            
+            fig_prof = px.bar(
+                df_resumen, 
+                x='occupation', 
+                y=['stress level', 'quality of sleep'],
+                barmode='group',
+                title="Estrés vs. Calidad de Sueño",
+                labels={'value': 'Puntaje', 'occupation': 'Profesión', 'variable': 'Indicador'},
+                color_discrete_map={'stress level': '#ef553b', 'quality of sleep': '#636efa'}
+            )
+            st.plotly_chart(fig_prof, width = "stretch")
 
+        with tab2:
+            fig_scatter2 = px.scatter(
+                df, x="sleep duration", y="stress level",
+                color="quality of sleep", size="quality of sleep",
+                title="El balance entre Horas de Sueño y Estrés",
+                color_continuous_scale="RdYlGn"
+            )
+            st.plotly_chart(fig_scatter2, width = "stretch")
     st.divider()
 
     # --- SECCIÓN 2: ACTIVIDAD FÍSICA ---
@@ -51,7 +61,7 @@ if "df_filtrado" in st.session_state:
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("Pasos vs. Actividad")
+            st.subheader("Pasos Diarios vs. Actividad Física ",text_alignment="center")
             # Gráfica simple de Streamlit
             st.scatter_chart(
                 df.sort_values("daily steps"), 
@@ -61,7 +71,7 @@ if "df_filtrado" in st.session_state:
             )
         
         with col2:
-            st.subheader("Calidad en Usuarios Activos")
+            st.subheader("Calidad de Sueño por Número de Personas ",text_alignment="center")
             # Filtrado para >7000 pasos
             active = df[df["daily steps"] > 7000]
             sleep_counts = active["quality of sleep"].value_counts().sort_index().reset_index()
@@ -71,26 +81,24 @@ if "df_filtrado" in st.session_state:
         
     st.divider()
 
-    # --- SECCIÓN 3: RELACIONES MULTIDIMENSIONALES ---
     with st.container():
-        st.header("🔍 Relaciones Profundas")
-        
-        tab1, tab2 = st.tabs(["Pasos y Calidad", "Sueño vs. Estrés"])
-        
-        with tab1:
-            fig_scatter1 = px.scatter(
-                df, x="daily steps", y="quality of sleep",
-                color="stress level", size="sleep duration",
-                title="Relación Pasos, Calidad y Duración",
-                color_continuous_scale="Viridis"
-            )
-            st.plotly_chart(fig_scatter1, use_container_width=True)
-            
-        with tab2:
-            fig_scatter2 = px.scatter(
-                df, x="sleep duration", y="stress level",
-                color="quality of sleep", size="quality of sleep",
-                title="El balance entre Horas de Sueño y Estrés",
-                color_continuous_scale="RdYlGn"
-            )
-            st.plotly_chart(fig_scatter2, use_container_width=True)
+        df_f = st.session_state["df_filtrado"]
+
+        st.subheader("🏃‍♂️ Relación: Pasos Diarios vs. Calidad de Sueño", text_alignment="center")
+
+        fig_pasos = px.scatter(
+            df_f, 
+            x='daily steps',            
+            y='quality of sleep',       
+            color='occupation',         
+            size='physical activity level', 
+            title="Impacto de la actividad física en la calidad del sueño",
+            labels={
+                "daily steps": "Pasos diarios", 
+                "quality of sleep": "Calidad de Sueño (1-10)",
+                "occupation": "Ocupación"
+            },
+            template="plotly_white"
+        )
+
+        st.plotly_chart(fig_pasos, width = "stretch")

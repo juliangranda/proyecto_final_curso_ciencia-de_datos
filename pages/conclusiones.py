@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Título principal centrado
-st.markdown("<h1 style='text-align: center;'>🏁 Conclusiones Finales</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>🏁 Conclusiones</h1>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -27,3 +27,23 @@ st.info("""
 st.divider()
 
 st.markdown("<h1 style='text-align: center;'>🏁 Recomendaciones</h1>", unsafe_allow_html=True)
+
+st.divider()
+
+# 1. Recomendación sobre las profesiones
+st.error("""
+**🏥 Cuidado especial en Salud,Ventas e Ingeniería**  
+Si trabajas en estas áreas, tu riesgo de estrés es más alto. Es vital tomar **pausas activas** y desconectarte totalmente al llegar a casa.
+""")
+
+# 2. Recomendación sobre el ejercicio
+st.success("""
+**🏃‍♂️ Camina más para dormir mejor**  
+Mantener un mínimo de **7,000 pasos diarios** para estabilizar el ánimo y la calidad del descanso.
+""")
+
+# 3. Recomendación sobre el descanso
+st.info("""
+**✨ Calidad antes que cantidad**  
+Enfocarse en la **calidad** (dormir sin interrupciones) más que en cumplir una cantidad fija de horas.
+""")

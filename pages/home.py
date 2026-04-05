@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-st.title("Análisis del Sueño")
+st.title("🛌Análisis del Sueño", text_alignment= "center")
 st.header("Bienvenido al análisis de datos sobre calidad del sueño y estilo de vida.")
 
 def espacio():
@@ -17,7 +17,6 @@ def cargar_datos():
 
 df = cargar_datos()
 with st.expander("Exploración Inicial del DataSet", expanded=True):
-    st.header("🔍 Exploración Inicial del DataSet")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Total de Filas", df.shape[0], help="Número total de registros")
@@ -40,7 +39,7 @@ with st.expander("Ver datos crudos del DataSet", expanded=True):
     filas = st.slider("Ajusta cuántas filas quieres explorar:", 5, df.shape[0], 10)
     st.write(f"Mostrando las primeras **{filas}** entradas:")
     # st.dataframe es más interactivo que st.write
-    st.dataframe(df.head(filas), use_container_width=True)
+    st.dataframe(df.head(filas), width="stretch")
 
 st.markdown("---")
 #----------------------------Ocupaciones Laborales--------------------
